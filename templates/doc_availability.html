@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Availability</title>
+    <link rel="stylesheet" href="/static/styles/main.css"> 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" xintegrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+<body>
+
+    <div class="main-card">
+
+        <h1 class="text-center mb-4 app-title">Clinix</h1>
+        <h3 class="text-center mb-5">Doctor's Availability</h3>
+        
+        <!-- Action must point to the correct function and include the user ID -->
+        <form method="POST" action="{{ url_for('doctor_availability', user_id=this_user.id) }}">
+            
+            <h5 class="mb-3">Select Available Time Slots for the Next 7 Days:</h5>
+
+            <table class="table table-bordered text-center schedule-table">
+                <thead>
+                    <tr class="bg-light">
+                        <th>Date</th>
+                        <th>Morning Slot (8 AM - 12 PM)</th>
+                        <th>Evening Slot (4 PM - 9 PM)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for day in next_seven_days %}
+                    <tr>
+                        <td class="align-middle font-weight-bold">
+                            <!-- FIX: Using strftime('%d/%m/%Y') to format the date for display -->
+                            {{ day.strftime('%d/%m/%Y') }}
+                        </td>
+                        
+                        <td class="p-2">
+                            <!-- Using strftime('%Y-%m-%d') for the name attribute key -->
+                            <input type="checkbox" 
+                                   name="slot_{{ day.strftime('%Y-%m-%d') }}_morning" 
+                                   id="morning-{{ loop.index }}" 
+                                   value="08:00 - 12:00" 
+                                   {% if schedule[day.strftime('%Y-%m-%d')].morning %} checked {% endif %}>
+                            
+                            <label for="morning-{{ loop.index }}" class="btn btn-sm btn-outline-success">
+                                08:00 - 12:00
+                            </label>
+                        </td>
+                        
+                        <td class="p-2">
+                             <!-- Using strftime('%Y-%m-%d') for the name attribute key -->
+                             <input type="checkbox" 
+                                   name="slot_{{ day.strftime('%Y-%m-%d') }}_evening" 
+                                   id="evening-{{ loop.index }}" 
+                                   value="16:00 - 21:00"
+                                   {% if schedule[day.strftime('%Y-%m-%d')].evening %} checked {% endif %}>
+
+                            <label for="evening-{{ loop.index }}" class="btn btn-sm btn-outline-danger">
+                                04:00 - 09:00
+                            </label>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+            </table>
+
+            <div class="text-right mt-3">
+                <button type="submit" class="btn btn-success">save</button>
+            </div>
+        </form>
+
+    </div>
+</body>
+</html>

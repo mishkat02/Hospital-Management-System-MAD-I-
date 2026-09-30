@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="/static/styles/main.css"> 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" xintegrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    
+</head>
+<body>
+    <div class="main-card">
+
+        <h1 class="text-center mb-4 app-title">Clinix</h1>
+        <h3 class="text-center mb-5">Welcome {{this_user.username}} </h3>
+
+        <!-- STATS SECTION -->
+        <div class="mb-5">
+            <h5 class="mb-3">Hospital Stats</h5>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="stat-card">
+                        <h4>{{ total_doctors }}</h4>
+                        <p>Total Doctors</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="stat-card">
+                        <h4>{{ total_patients }}</h4>
+                        <p>Total Patients</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="stat-card">
+                        <h4>{{ total_appointments }}</h4>
+                        <p>Total Appointments</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- ADMIN SEARCH FORM -->
+        <form action="{{ url_for('admin_search') }}" method="GET" class="mb-5">
+            <div class="d-flex align-items-center">
+                <input type="text" name="query" class="form-control admin-search-input mr-2" placeholder="Search doctor name, patient name, or specialization..." value="{{ search_query if search_query else '' }}">
+                <button class="btn btn-primary search-btn" type="submit">Search</button>
+            </div>
+        </form>
+        
+        <div class="mb-5">
+            <div class="d-flex justify-content-between align-items.center mb-3">
+                <h5 class="mb-0">Registered Doctors {% if search_query %} (Search Results for: "{{ search_query }}") {% endif %}</h5>
+                <a href="{{ url_for('add_doctor') }}" class="btn btn-success btn-sm create-btn">Create</a>
+            </div>
+            
+            <ul class="list-group">
+                {% for doctor in all_doctors %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span>
+                        Dr. {{ doctor.full_name }} ({{ doctor.department.name if doctor.department else 'N/A' }})
+                        <!-- Show a visual tag if user is inactive -->
+                        {% if not doctor.user.is_active %}
+                            <span class="badge badge-dark">Blacklisted</span>
+                        {% endif %}
+                    </span>
+                    <div class="item-actions">
+                        <a href="{{ url_for('edit_doctor', doc_id=doctor.id) }}" class="btn btn-outline-dark btn-sm action-btn edit-btn">edit</a>
+                        
+                        <form action="{{ url_for('delete_doctor', doc_id=doctor.id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete Dr. {{ doctor.full_name }}? This action is irreversible.');">
+                            <button type="submit" class="btn btn-outline-dark btn-sm action-btn delete-btn">delete</button>
+                        </form>
+                        
+                        <!-- Updated Blacklist Doctor Button -->
+                        <form action="{{ url_for('toggle_blacklist_doctor', doc_id=doctor.id) }}" method="POST" style="display:inline;">
+                            {% if doctor.user.is_active %}
+                                <button type="submit" class="btn btn-outline-dark btn-sm action-btn">Blacklist</button>
+                            {% else %}
+                                <button type="submit" class="btn btn-outline-success btn-sm action-btn">Un-blacklist</button>
+                            {% endif %}
+                        </form>
+
+                    </div>
+                </li>
+                {% else %}
+                <li class="list-group-item text-center text-muted">No doctors found.</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="mb-5">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="mb-0">Registered Patients {% if search_query %} (Search Results for: "{{ search_query }}") {% endif %}</h5>
+            </div>
+            <ul class="list-group">
+                {% for patient in all_patients %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span>
+                        {{ patient.full_name }}
+                        <!-- Show a visual tag if user is inactive -->
+                        {% if not patient.user.is_active %}
+                            <span class="badge badge-dark">Blacklisted</span>
+                        {% endif %}
+                    </span>
+                    <div class="item-actions">
+                         <a href="{{ url_for('admin_edit_patient', patient_id=patient.id) }}" class="btn btn-outline-dark btn-sm action-btn edit-btn">edit</a>
+                        
+                         <form action="{{ url_for('delete_patient', patient_id=patient.id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete {{ patient.full_name }}?');">
+                            <button type="submit" class="btn btn-outline-dark btn-sm action-btn delete-btn">delete</button>
+                        </form>
+
+                        <!-- Updated Blacklist Patient Button -->
+                        <form action="{{ url_for('toggle_blacklist_patient', patient_id=patient.id) }}" method="POST" style="display:inline;">
+                            {% if patient.user.is_active %}
+                                <button type="submit" class="btn btn-outline-dark btn-sm action-btn">Blacklist</button>
+                            {% else %}
+                                <button type="submit" class="btn btn-outline-success btn-sm action-btn">Un-blacklist</button>
+                            {% endif %}
+                        </form>
+
+                    </div>
+                </li>
+                {% else %}
+                <li class="list-group-item text-center text-muted">No patients found.</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <!-- UPCOMING APPOINTMENTS -->
+        <div class="mb-5"> 
+            <h5 class="mb-3">Upcoming Appointments</h5>
+            <table class="table table-bordered table-sm appointment-table">
+                <thead>
+                    <tr class="bg-light">
+                        <th>Sr No.</th>
+                        <th>Patient Name</th>
+                        <th>Doctor Name</th>
+                        <th>Department</th>
+                        <th>Patient History</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for appt in upcoming_appointments %}
+                    <tr>
+                        <td>{{ loop.index }}.</td>
+                        <td>{{ appt.patient_details.full_name }}</td>
+                        <td>Dr. {{ appt.doctor_details.full_name }}</td>
+                        <td>{{ appt.doctor_details.department.name if appt.doctor_details.department else 'N/A' }}</td>
+                        <td>
+                            
+                            <!-- UPDATED LINK -->
+                            <a href="{{ url_for('patient_history', user_id=appt.patient_details.user_id, ref='admin') }}" class="btn btn-info btn-sm view-btn" target="_blank">view</a>
+                            
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="5" class="text-center">No upcoming appointments.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- PAST APPOINTMENTS TABLE -->
+        <div class="mb-2">
+            <h5 class="mb-3">Past Appointments</h5>
+            <table class="table table-bordered table-sm appointment-table">
+                <thead>
+                    <tr class="bg-light">
+                        <th>Sr No.</th>
+                        <th>Patient Name</th>
+                        <th>Doctor Name</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for appt in past_appointments %}
+                    <tr>
+                        <td>{{ loop.index }}.</td>
+                        <td>{{ appt.patient_details.full_name }}</td>
+                        <td>Dr. {{ appt.doctor_details.full_name }}</td>
+                        <td>{{ appt.date.strftime('%d/%m/%Y') }}</td>
+                        <td>
+                            {% if appt.status == 'Completed' %}
+                                <span class="badge badge-success">{{ appt.status }}</span>
+                            {% elif appt.status == 'Cancelled' %}
+                                <span class="badge badge-danger">{{ appt.status }}</span>
+                            {% else %}
+                                <span class="badge badge-secondary">{{ appt.status }}</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="5" class="text-center">No past appointments found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="text-center mt-3">
+            <a href="{{ url_for('login') }}" type="submit" class="btn btn-primary">Logout </a>
+        </div>
+
+    </div>
+</body>
+</html>

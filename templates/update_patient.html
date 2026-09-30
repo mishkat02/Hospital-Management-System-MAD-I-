@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Patient History</title>
+    <link rel="stylesheet" href="/static/styles/main.css"> 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" xintegrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+<body>
+
+    <div class="main-card">
+
+        <h1 class="text-center mb-4 app-title">Clinix</h1>
+        <h3 class="text-center mb-5">Update Patient History</h3>
+
+        <div class="mb-4">
+            <h5>Patient Name: {{ patient.full_name }}</h5>
+            <h5>Appointment Date: {{ appointment.date }}</h5>
+        </div>
+
+        <form action="{{ url_for('update_treatment_history', app_id=appointment.id) }}" method="POST">
+            
+            <div class="form-row mb-3">
+                
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="visitType">Visit Type</label> 
+                        <input type="text" class="form-control" id="visitType" name="visitType" value="{{ treatment.visit_type or 'In-Person' }}" placeholder="In-Person / Virtual"> 
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="testDone">Test Done</label> 
+                        <input type="text" class="form-control" id="testDone" name="testDone" value="{{ treatment.test_done or '' }}" placeholder="ECG, X-Ray, etc."> 
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-row mb-3">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="diagnosis">Diagnosis</label> 
+                        <input type="text" class="form-control" id="diagnosis" name="diagnosis" value="{{ treatment.diagnosis or '' }}" placeholder="Brief diagnosis summary" required> 
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="medicines">Medicines/Notes</label> 
+                        <input type="text" class="form-control" id="medicines" name="medicines" value="{{ treatment.notes or '' }}" placeholder="List of medicines or general notes"> 
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-row mb-4">
+                <div class="col-12">
+                    <div class="form-group">
+                        <label for="prescription">Prescription</label> 
+                        <textarea class="form-control" id="prescription" name="prescription" rows="3" placeholder="Detailed treatment plan and medication." required>{{ treatment.prescription or '' }}</textarea>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Save History</button>
+            <a href="{{ url_for('doctor_dashboard', user_id=doctor.user_id) }}" class="btn btn-secondary ">Back</a>
+            
+        </form>
+
+    </div>
+</body>
+</html>

@@ -1,0 +1,38 @@
+#create database
+python
+>>> from app import *
+>>> db.create_all()
+
+#create
+>>> admin1 = User(username="admin123", email="admin@user.com", password_hash="1234_hashed_password", role="Admin")
+>>> db.session.add(admin1)
+>>> db.session.commit()
+
+>>> db.create_all()
+>>> admin2 = User(username="Yash",email="yash@user.com",password_hash="1234")
+>>> db.session.add(admin2)
+>>> db.session.commit()
+
+#Edit or update entry
+>>> user3= User.query.filter_by(username="Yash").first()
+>>> user3
+<User 3>
+>>> user3.username = "Rahul"
+>>> db.session.commit()
+>>> user3.email = "rahul@user.com"   
+>>> db.session.commit()
+
+#delete
+>>> u1 = User.query.get(3)
+>>> db.session.delete(u1)
+>>> db.session.commit()
+
+#read
+>>> users= User.query.all()
+>>> users
+[<User 1>, <User 2>]
+>>> users[0]
+<User 1>
+>>> u1=users[0]            
+>>> u1.username
+'admin123'

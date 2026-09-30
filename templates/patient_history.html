@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient History</title>
+    <link rel="stylesheet" href="/static/styles/main.css"> 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" xintegrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+<body>
+
+    <div class="p_main-card">
+
+        <h1 class="text-center mb-4 app-title">Clinix</h1>
+        <h3 class="text-center mb-5">Patient History for {{ patient.full_name }}</h3>
+        
+        <div class="mb-4">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <h5 class="mb-0">Past Appointments and Treatment Records</h5> 
+                
+                
+                <!-- Get the referrer from the URL (e.g., ?ref=doctor) -->
+                {% set referrer = request.args.get('ref', 'patient') %} 
+            
+                {% if referrer == 'doctor' %}
+                    <!-- If a doctor is viewing, go back to the doctor's dashboard -->
+                    <!-- We get the doc_id, which we will add to the link in the next step -->
+                    {% set doctor_id = request.args.get('doc_id') %}
+                    <a href="{{ url_for('doctor_dashboard', user_id=doctor_id) }}" class="btn btn-outline-dark btn-sm action-btn">Back to Dashboard</a>
+                
+                {% elif referrer == 'admin' %}
+                    <!-- If an admin is viewing, go back to the admin dashboard -->
+                    <a href="{{ url_for('admin_dashboard') }}" class="btn btn-outline-dark btn-sm action-btn">Back to Dashboard</a>
+
+                {% else %}
+                    <!-- By default (or if ref='patient'), go to the patient's dashboard -->
+                    <a href="{{ url_for('patient_dashboard', user_id=this_user.id) }}" class="btn btn-outline-dark btn-sm action-btn">Back to Dashboard</a>
+                {% endif %}
+                
+            </div>
+        </div>
+        
+        <div class="mb-2">
+            <table class="table table-bordered table-sm appointment-table">
+                <thead>
+                    <tr class="bg-light">
+                        <th>Date & Time</th>
+                        <th>Doctor</th>
+                        <th>Department</th>
+                        <th>Diagnosis</th>
+                        <th>Prescription</th>
+                        <th>Visit Type</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for appt in history %}
+                    <tr>
+                        <td>{{ appt.date }} @ {{ appt.time }}</td>
+                        <td>Dr. {{ appt.doctor_details.full_name }}</td>
+                        <td>{{ appt.doctor_details.department.name if appt.doctor_details.department else 'N/A' }}</td>
+                        
+                        <!-- Ensure treatment exists before accessing fields -->
+                        {% if appt.treatment %}
+                        <td>{{ appt.treatment.diagnosis }}</td>
+                        <td>{{ appt.treatment.prescription }}</td>
+                        <td>{{ appt.treatment.visit_type }}</td>
+                        {% else %}
+                        <td colspan="3" class="text-muted">No treatment record available.</td>
+                        {% endif %}
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="6" class="text-center text-muted">No completed appointment history found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</body>
+</html>

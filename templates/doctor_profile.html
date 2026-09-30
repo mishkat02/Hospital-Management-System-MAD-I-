@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Profile</title>
+    <link rel="stylesheet" href="/static/styles/main.css"> 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" crossorigin="anonymous">
+    
+    </head>
+<body>
+
+    <div class="main-card">
+
+        <h1 class="text-center mb-4 app-title">Clinix</h1>
+        <h3 class="text-center mb-5">Doctor Profile</h3>
+
+
+        <div class="profile-card">
+            <div class="profile-header">
+                
+                <div>
+                    <h3 class="mb-0">Dr. {{ doctor.full_name }}</h3>
+                    <p class="text-muted mb-0">{{ doctor.qualification or 'MBBS' }}</p>
+                </div>
+            </div>
+
+            <h5 class="mb-1">{{ doctor.department.name }}</h5>
+            <p class="mb-3 text-muted">({{ doctor.experience_years or 0 }} years experience)</p>
+            
+            <p>
+                Dr. {{ doctor.full_name }} is a specialist in {{ doctor.department.name }}. 
+                With {{ doctor.experience_years or 0 }} years of experience, they are 
+                dedicated to providing excellent care.
+            </p>
+            
+            <hr>
+
+            <div class="mt-4">
+                <a href="{{ url_for('book_appointment', user_id=this_user.id, doctor_id=doctor.id) }}" class="btn btn-success">
+                    Check Availability
+                </a>
+                
+                <a href="{{ url_for('search_doctors', user_id=this_user.id, dept_name=doctor.department.name) }}" class="btn btn-secondary">
+                    Go Back
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

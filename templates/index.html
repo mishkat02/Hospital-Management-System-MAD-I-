@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clinix - Hospital Management</title>
+    
+    <!-- Load Inter font (we still need this) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- Basic Setup --- */
+        /* Reset margins and set font */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F9FAFB; /* This was bg-gray-50 */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* --- Header / Navigation --- */
+        .header-nav {
+            background-color: #ffffff; /* This was bg-white */
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* This was shadow-sm */
+            padding: 1rem 2rem; /* container mx-auto px-4 py-4 (approx) */
+            display: flex;
+            justify-content: space-between; /* This was justify-between */
+            align-items: center; /* This was items-center */
+        }
+
+        .logo {
+            font-size: 1.875rem; /* This was text-3xl */
+            font-weight: 700; /* This was font-bold */
+            color: #000206; /* This was text-blue-600 */
+            text-decoration: none;
+        }
+
+        .nav-buttons {
+            /* This was space-x-2 */
+            display: flex;
+            gap: 0.5rem; /* (space-x-2) */
+        }
+
+        .nav-buttons a {
+            font-weight: 500; /* This was font-medium */
+            padding: 0.5rem 1rem; /* This was px-4 py-2 */
+            border-radius: 0.5rem; /* This was rounded-lg */
+            text-decoration: none;
+            transition: all 0.2s ease; /* This was transition */
+        }
+
+        .login-btn {
+            color: #4B5563; /* This was text-gray-600 */
+        }
+        .login-btn:hover {
+            color: #2563EB; /* This was hover:text-blue-600 */
+        }
+
+        .register-btn {
+            background-color: #2563EB; /* This was bg-blue-600 */
+            color: #ffffff; /* This was text-white */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* This was shadow-md */
+        }
+        .register-btn:hover {
+            background-color: #1D4ED8; /* This was hover:bg-blue-700 */
+        }
+
+        /* --- Main Content --- */
+        .main-content {
+            /* This combination makes it grow to fill space and center its child */
+            flex-grow: 1; 
+            display: flex;
+            align-items: center; /* This was items-center */
+            justify-content: center; /* This was justify-center */
+
+            /* This was from your original <style> block */
+            min-height: calc(100vh - 150px);
+        }
+
+        .hero-section {
+            padding: 10%; /* This was py-16 px-4 */
+            text-align: center; /* This was text-center */
+        }
+
+        .hero-title {
+            margin-top: 5%;
+            font-size: 300%; /* This was text-4xl */
+            font-weight: 700; /* This was font-bold */
+            color: #111827; /* This was text-gray-900 */
+            line-height: 1.2; /* This was leading-tight */
+        }
+        
+        /* This handles the responsive font size */
+        @media (min-width: 768px) {
+            .hero-title {
+                font-size: 450%;; /* This was md:text-5xl */
+            }
+        }
+
+        .hero-title .highlight {
+            color: #2563EB; /* This was text-blue-600 */
+        }
+
+        .hero-description {
+            margin-top: 1%; /* This was mt-4 */
+            font-size: 150%; /* This was text-lg */
+            color: #4B5563; /* This was text-gray-600 */
+            max-width: 90%; /* This was max-w-2xl */
+            margin-left: auto; /* This was mx-auto */
+            margin-right: auto; /* This was mx-auto */
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Header / Navigation -->
+    <header class="header-nav">
+        <!-- Logo -->
+        <a href="#" class="logo">Clinix</a>
+        
+        <!-- Navigation Buttons -->
+        <div class="nav-buttons">
+          <a href="{{ url_for('login') }}" class="nav-link login-btn">Login</a>
+          <a href="{{ url_for('register') }}" class="nav-link register-btn">Register</a>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Centered Hero Section -->
+        <section class="hero-section">
+            
+            <h1 class="hero-title">
+                Welcome to <span class="highlight">Clinix</span>
+            </h1>
+            
+            <p class="hero-description">
+                Streamline your hospital operations with Clinix — the all-in-one system for managing patients, doctors, and appointments.
+            </p>
+            
+        </section>
+    </main>
+
+</body>
+</html>

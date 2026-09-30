@@ -1,0 +1,86 @@
+
+    /* Login */
+    .my_login {
+        width: 30%;
+        margin: auto;
+        margin-top: 100px;
+        height: auto;
+        padding: 20px;
+        border: 4px solid white;
+        border-radius: 10px;
+        background-color: rgb(255, 255, 255);
+    }
+    .form {
+        width: 100%;
+        text-align: left;
+        margin-top: 15px;
+        margin-bottom: 15px;
+        padding: 0 15px;
+    }
+
+    /* Sign */
+    .my_signin {
+        width: 30%;
+        margin: auto;
+        margin-top: 50px;
+        height: auto;
+        padding: 20px;
+        border: 4px solid white;
+        border-radius: 10px;
+        background-color: rgb(255, 255, 255);
+    }
+    .form {               /* Same as login form*/
+        width: 100%;
+        text-align: left;
+        margin-top: 15px;
+        margin-bottom: 15px;
+        padding: 0 15px;
+    }
+    
+      /* Admin Dashboard */ 
+/* Light blue background color to match the doctor page */
+body {
+    background-color: #e0f7fa !important; 
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+/* Card styling to center content and give it the clean look */
+.main-card {
+    max-width: 900px;
+    margin: 0 auto;
+    background-color: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+/* Styling for the header text to match the doctor page's aesthetic */
+.app-title {
+    font-family: serif; 
+    font-style: italic;
+}
+
+/* Subtle border for list items within the card */
+.list-group-item {
+    border-left: none;
+    border-right: none;
+}
+.list-group-item:first-child {
+    border-top: none;
+}
+.list-group-item:last-child {
+    border-bottom: 1px solid rgba(0,0,0,.125); /* Ensure bottom border is visible */
+}
+
+/* Patient history*/
+.p_main-card{
+    max-width: 900px;
+    margin: 0 auto;
+    background-color: white;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    margin-top: 5%;
+}
+
